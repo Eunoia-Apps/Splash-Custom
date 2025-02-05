@@ -1,9 +1,3 @@
-/**
- *  Splash
- *  Copyright (c) John Sundell 2018
- *  MIT license - see LICENSE.md
- */
-
 #if os(macOS)
 
 import Cocoa
@@ -48,8 +42,13 @@ string.draw(in: CGRect(
     height: stringSize.height
 ))
 
-let image = context.cgContext.makeImage()!
-image.write(to: options.outputURL)
+if let image = context.cgContext.makeImage() {
+    if #available(macOS 11.0, *) {
+        image.write(to: options.outputURL)
+    } else {
+        print("❌ Writing images is only supported on macOS 11.0 or later.")
+    }
+}
 
 #else
 print("😞 SplashImageGen currently only supports macOS")

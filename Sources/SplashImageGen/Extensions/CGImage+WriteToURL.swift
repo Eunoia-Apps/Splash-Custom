@@ -7,11 +7,18 @@
 #if os(macOS)
 
 import Foundation
+import CoreGraphics
 import ImageIO
+import UniformTypeIdentifiers
 
+@available(macOS 11.0, *)
 extension CGImage {
     func write(to url: URL) {
-        let destination = CGImageDestinationCreateWithURL(url as CFURL, kUTTypePNG, 1, nil)!
+        guard let destination = CGImageDestinationCreateWithURL(url as CFURL, UTType.png.identifier as CFString, 1, nil) else {
+            print("Failed to create image destination")
+            return
+        }
+        
         CGImageDestinationAddImage(destination, self, nil)
         CGImageDestinationFinalize(destination)
     }
